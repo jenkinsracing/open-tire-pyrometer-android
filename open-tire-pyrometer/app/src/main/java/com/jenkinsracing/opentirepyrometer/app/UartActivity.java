@@ -73,9 +73,15 @@ public class UartActivity extends UartInterfaceActivity {
     private int mRxColor;
 
     // UI
-    private EditText mBufferTextView;
-    private ListView mBufferListView;
-    private TimestampListAdapter mBufferListAdapter;
+    //private EditText mBufferTextView;
+    //private ListView mBufferListView;
+
+    // AJ
+    private EditText mLiveTemp;
+    private EditText mTire1Reading1;
+
+
+    //private TimestampListAdapter mBufferListAdapter;
     private EditText mSendEditText;
     private MenuItem mMqttMenuItem;
     private Handler mMqttMenuItemAnimationHandler;
@@ -130,36 +136,40 @@ public class UartActivity extends UartInterfaceActivity {
         mRxColor = typedValue.data;
 
         // UI
-        mBufferListView = (ListView) findViewById(R.id.bufferListView);
-        mBufferListAdapter = new TimestampListAdapter(this, R.layout.layout_uart_datachunkitem);
-        mBufferListView.setAdapter(mBufferListAdapter);
-        mBufferListView.setDivider(null);
+//        mBufferListView = (ListView) findViewById(R.id.bufferListView);
+//        mBufferListAdapter = new TimestampListAdapter(this, R.layout.layout_uart_datachunkitem);
+//        mBufferListView.setAdapter(mBufferListAdapter);
+//        mBufferListView.setDivider(null);
 
-        mBufferTextView = (EditText) findViewById(R.id.bufferTextView);
-        if (mBufferTextView != null) {
-            mBufferTextView.setKeyListener(null);     // make it not editable
-        }
+//        mBufferTextView = (EditText) findViewById(R.id.bufferTextView);
+//        if (mBufferTextView != null) {
+//            mBufferTextView.setKeyListener(null);     // make it not editable
+//        }
 
-        mSendEditText = (EditText) findViewById(R.id.sendEditText);
-        mSendEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    onClickSend(null);
-                    return true;
-                }
+        // AJ
+        mLiveTemp = (EditText) findViewById((R.id.liveTemp));
+        mTire1Reading1 = (EditText) findViewById(R.id.tire1Reading1);
 
-                return false;
-            }
-        });
-        mSendEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    // Dismiss keyboard when sendEditText loses focus
-                    dismissKeyboard(view);
-                }
-            }
-        });
+//        mSendEditText = (EditText) findViewById(R.id.sendEditText);
+//        mSendEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+//                if (actionId == EditorInfo.IME_ACTION_SEND) {
+//                    onClickSend(null);
+//                    return true;
+//                }
+//
+//                return false;
+//            }
+//        });
+//        mSendEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            public void onFocusChange(View view, boolean hasFocus) {
+//                if (!hasFocus) {
+//                    // Dismiss keyboard when sendEditText loses focus
+//                    dismissKeyboard(view);
+//                }
+//            }
+//        });
 
         mSentBytesTextView = (TextView) findViewById(R.id.sentBytesTextView);
         mReceivedBytesTextView = (TextView) findViewById(R.id.receivedBytesTextView);
@@ -243,11 +253,11 @@ public class UartActivity extends UartInterfaceActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void onClickSend(View view) {
-        String data = mSendEditText.getText().toString();
-        mSendEditText.setText("");       // Clear editText
+    public void onClickTakeReading(View view) {
+        String data = mLiveTemp.getText().toString();
+        mTire1Reading1.setText(data);
 
-        uartSendData(data, false);
+        //uartSendData(data, false);
     }
 
     private void uartSendData(String data, boolean wasReceivedFromMqtt) {
@@ -284,54 +294,54 @@ public class UartActivity extends UartInterfaceActivity {
         mDataBuffer.add(dataChunk);
 
         final String formattedData = mShowDataInHexFormat ? BleUtils.bytesToHex2(bytes) : BleUtils.bytesToText(bytes, true);
-        if (mIsTimestampDisplayMode) {
-            final String currentDateTimeString = DateFormat.getTimeInstance().format(new Date(dataChunk.getTimestamp()));
-            mBufferListAdapter.add(new TimestampData("[" + currentDateTimeString + "] TX: " + formattedData, mTxColor));
-            mBufferListView.setSelection(mBufferListAdapter.getCount());
-        }
+//        if (mIsTimestampDisplayMode) {
+//            final String currentDateTimeString = DateFormat.getTimeInstance().format(new Date(dataChunk.getTimestamp()));
+//            mBufferListAdapter.add(new TimestampData("[" + currentDateTimeString + "] TX: " + formattedData, mTxColor));
+//            mBufferListView.setSelection(mBufferListAdapter.getCount());
+//        }
 
         // Update UI
         updateUI();
     }
 
-    public void onClickCopy(View view) {
-        String text = mBufferTextView.getText().toString(); // mShowDataInHexFormat ? mHexSpanBuffer.toString() : mAsciiSpanBuffer.toString();
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("UART", text);
-        clipboard.setPrimaryClip(clip);
-    }
+//    public void onClickCopy(View view) {
+//        String text = mBufferTextView.getText().toString(); // mShowDataInHexFormat ? mHexSpanBuffer.toString() : mAsciiSpanBuffer.toString();
+//        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//        ClipData clip = ClipData.newPlainText("UART", text);
+//        clipboard.setPrimaryClip(clip);
+//    }
 
-    public void onClickClear(View view) {
-        mTextSpanBuffer.clear();
-        mDataBufferLastSize = 0;
-        mBufferListAdapter.clear();
-        mBufferTextView.setText("");
+//    public void onClickClear(View view) {
+//        mTextSpanBuffer.clear();
+//        mDataBufferLastSize = 0;
+//        //mBufferListAdapter.clear();
+//        mBufferTextView.setText("");
+//
+//        mDataBuffer.clear();
+//        mSentBytes = 0;
+//        mReceivedBytes = 0;
+//        updateUI();
+//    }
 
-        mDataBuffer.clear();
-        mSentBytes = 0;
-        mReceivedBytes = 0;
-        updateUI();
-    }
-
-    public void onClickShare(View view) {
-        String textToSend = mBufferTextView.getText().toString(); // (mShowDataInHexFormat ? mHexSpanBuffer : mAsciiSpanBuffer).toString();
-
-        if (textToSend.length() > 0) {
-
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.uart_share_subject));     // subject will be used if sent to an email app
-            sendIntent.setType("text/*");       // Note: don't use text/plain because dropbox will not appear as destination
-            // startActivity(sendIntent);
-            startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.uart_sharechooser_title)));      // Always show the app-chooser
-        } else {
-            new AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.uart_share_empty))
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show();
-        }
-    }
+//    public void onClickShare(View view) {
+//        String textToSend = mBufferTextView.getText().toString(); // (mShowDataInHexFormat ? mHexSpanBuffer : mAsciiSpanBuffer).toString();
+//
+//        if (textToSend.length() > 0) {
+//
+//            Intent sendIntent = new Intent();
+//            sendIntent.setAction(Intent.ACTION_SEND);
+//            sendIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
+//            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.uart_share_subject));     // subject will be used if sent to an email app
+//            sendIntent.setType("text/*");       // Note: don't use text/plain because dropbox will not appear as destination
+//            // startActivity(sendIntent);
+//            startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.uart_sharechooser_title)));      // Always show the app-chooser
+//        } else {
+//            new AlertDialog.Builder(this)
+//                    .setMessage(getString(R.string.uart_share_empty))
+//                    .setPositiveButton(android.R.string.ok, null)
+//                    .show();
+//        }
+//    }
 
     /*
     public void onClickFormatAscii(View view) {
@@ -357,8 +367,8 @@ public class UartActivity extends UartInterfaceActivity {
 
     private void setDisplayFormatToTimestamp(boolean enabled) {
         mIsTimestampDisplayMode = enabled;
-        mBufferTextView.setVisibility(enabled ? View.GONE : View.VISIBLE);
-        mBufferListView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+        //mBufferTextView.setVisibility(enabled ? View.GONE : View.VISIBLE);
+        //mBufferListView.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
 
     // region Menu
@@ -567,15 +577,7 @@ public class UartActivity extends UartInterfaceActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mIsTimestampDisplayMode) {
-                            final String currentDateTimeString = DateFormat.getTimeInstance().format(new Date(dataChunk.getTimestamp()));
-                            final String formattedData = mShowDataInHexFormat ? BleUtils.bytesToHex2(bytes) : BleUtils.bytesToText(bytes, true);
-
-                            mBufferListAdapter.add(new TimestampData("[" + currentDateTimeString + "] RX: " + formattedData, mRxColor));
-                            //mBufferListAdapter.add("[" + currentDateTimeString + "] RX: " + formattedData);
-                            //mBufferListView.smoothScrollToPosition(mBufferListAdapter.getCount() - 1);
-                            mBufferListView.setSelection(mBufferListAdapter.getCount());
-                        }
+                        //
                         updateUI();
                     }
                 });
@@ -643,11 +645,13 @@ public class UartActivity extends UartInterfaceActivity {
                     final byte[] bytes = dataChunk.getData();
                     final String formattedData = mShowDataInHexFormat ? BleUtils.bytesToHex2(bytes) : BleUtils.bytesToText(bytes, true);
                     addTextToSpanBuffer(mTextSpanBuffer, formattedData, isRX ? mRxColor : mTxColor);
+
+                    mLiveTemp.setText(formattedData);
                 }
 
                 mDataBufferLastSize = mDataBuffer.size();
-                mBufferTextView.setText(mTextSpanBuffer);
-                mBufferTextView.setSelection(0, mTextSpanBuffer.length());        // to automatically scroll to the end
+                //mBufferTextView.setText(mTextSpanBuffer);
+                //mBufferTextView.setSelection(0, mTextSpanBuffer.length());        // to automatically scroll to the end
             }
         }
     }
@@ -655,25 +659,25 @@ public class UartActivity extends UartInterfaceActivity {
     private void recreateDataView() {
 
         if (mIsTimestampDisplayMode) {
-            mBufferListAdapter.clear();
-
-            final int bufferSize = mDataBuffer.size();
-            for (int i = 0; i < bufferSize; i++) {
-
-                final UartDataChunk dataChunk = mDataBuffer.get(i);
-                final boolean isRX = dataChunk.getMode() == UartDataChunk.TRANSFERMODE_RX;
-                final byte[] bytes = dataChunk.getData();
-                final String formattedData = mShowDataInHexFormat ? BleUtils.bytesToHex2(bytes) : BleUtils.bytesToText(bytes, true);
-
-                final String currentDateTimeString = DateFormat.getTimeInstance().format(new Date(dataChunk.getTimestamp()));
-                mBufferListAdapter.add(new TimestampData("[" + currentDateTimeString + "] " + (isRX ? "RX" : "TX") + ": " + formattedData, isRX ? mRxColor : mTxColor));
-//                mBufferListAdapter.add("[" + currentDateTimeString + "] " + (isRX ? "RX" : "TX") + ": " + formattedData);
-            }
-            mBufferListView.setSelection(mBufferListAdapter.getCount());
+//            mBufferListAdapter.clear();
+//
+//            final int bufferSize = mDataBuffer.size();
+//            for (int i = 0; i < bufferSize; i++) {
+//
+//                final UartDataChunk dataChunk = mDataBuffer.get(i);
+//                final boolean isRX = dataChunk.getMode() == UartDataChunk.TRANSFERMODE_RX;
+//                final byte[] bytes = dataChunk.getData();
+//                final String formattedData = mShowDataInHexFormat ? BleUtils.bytesToHex2(bytes) : BleUtils.bytesToText(bytes, true);
+//
+//                final String currentDateTimeString = DateFormat.getTimeInstance().format(new Date(dataChunk.getTimestamp()));
+//                mBufferListAdapter.add(new TimestampData("[" + currentDateTimeString + "] " + (isRX ? "RX" : "TX") + ": " + formattedData, isRX ? mRxColor : mTxColor));
+////                mBufferListAdapter.add("[" + currentDateTimeString + "] " + (isRX ? "RX" : "TX") + ": " + formattedData);
+//            }
+//            mBufferListView.setSelection(mBufferListAdapter.getCount());
         } else {
             mDataBufferLastSize = 0;
             mTextSpanBuffer.clear();
-            mBufferTextView.setText("");
+            //mBufferTextView.setText("");
         }
     }
 

@@ -3,7 +3,7 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/default_background"
+
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -17,28 +17,29 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/liveTemp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#cccccc"
-            android:orientation="horizontal">
+            android:layout_column="0"
+            android:layout_row="1"
+            android:layout_weight="0.08"
+            android:cursorVisible="false"
+            android:editable="false"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:textStyle="bold"
+            android:visibility="visible" />
 
-            <EditText
-                android:id="@+id/sendEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="textNoSuggestions|textVisiblePassword"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:scrollbars="vertical"
-                android:singleLine="false" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClickSend"
-                android:text="@string/uart_send" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/takeReading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="9"
+            android:onClick="onClickTakeReading"
+            android:text="Take Reading" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -76,57 +77,195 @@
           android:layout_below="@id/headerLayout"
           android:layout_marginTop="10dp"
           !-->
-        <ListView
-            android:id="@+id/bufferListView"
+
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#cccccc" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.08">
 
-        <EditText
-            android:id="@+id/bufferTextView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#cccccc"
-            android:cursorVisible="false"
-            android:gravity="top"
-            android:scrollbarFadeDuration="0"
-            android:textColorHighlight="#ffffff" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.08"
+                    android:orientation="vertical">
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onClickCopy"
-                android:text="@string/uart_copy"
-                android:textColor="@drawable/default_textcolor" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.08"
+                        android:orientation="horizontal">
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onClickShare"
-                android:text="@string/uart_share"
-                android:textColor="@drawable/default_textcolor" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.08"
+                            android:orientation="horizontal">
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onClickClear"
-                android:text="@string/uart_clear"
-                android:textColor="@drawable/default_textcolor" />
+                            <EditText
+                                android:id="@+id/tire1Reading1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.13"
+                                android:ems="10"
+                                android:gravity="left"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
 
-        </LinearLayout>
+                            <EditText
+                                android:id="@+id/editText4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.15"
+                                android:ems="10"
+                                android:gravity="left"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+                            <EditText
+                                android:id="@+id/editText2"
+                                android:layout_width="71dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="left"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.08"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/editText3"
+                                android:layout_width="81dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="right"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+                            <EditText
+                                android:id="@+id/editText4"
+                                android:layout_width="38dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="right"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+                            <EditText
+                                android:id="@+id/editText2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="right"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.08"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.08"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.08"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/editText3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.13"
+                                android:ems="10"
+                                android:gravity="left"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+                            <EditText
+                                android:id="@+id/editText4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.15"
+                                android:ems="10"
+                                android:gravity="left"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+                            <EditText
+                                android:id="@+id/editText2"
+                                android:layout_width="71dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="left"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.08"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/editText3"
+                                android:layout_width="81dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="right"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+                            <EditText
+                                android:id="@+id/editText4"
+                                android:layout_width="38dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="right"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+                            <EditText
+                                android:id="@+id/editText2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:gravity="right"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </TableRow>
+
+        </TableLayout>
+
     </LinearLayout>
 
 </RelativeLayout>
